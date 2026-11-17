@@ -40,6 +40,18 @@ def add_quiz(quizzes):
 
     print("퀴즈가 추가되었습니다!")
 
+def show_quiz_list(quizzes):
+    print("\n===== 퀴즈 목록 =====")
+
+    if not quizzes:
+        print("등록된 퀴즈가 없습니다.")
+        return
+
+    for i, quiz in enumerate(quizzes, start=1):
+        print(f"{i}. {quiz.question}")
+
+    print(f"\n총 {len(quizzes)}개의 퀴즈가 등록되어 있습니다.")
+
 
 def play_quiz(quizzes):
     score = 0
@@ -107,7 +119,7 @@ while True:
             add_quiz(quizzes)
 
         elif choice == 3:
-            print("퀴즈 목록 기능은 준비 중입니다.")
+            show_quiz_list(quizzes)
 
         elif choice == 4:
             print("최고 점수 확인 기능은 준비 중입니다.")
