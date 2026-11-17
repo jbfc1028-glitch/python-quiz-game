@@ -1,9 +1,47 @@
 
+from quiz import Quiz
 from quiz_data import create_default_quizzes
 
 
-def play_quiz():
-    quizzes = create_default_quizzes()
+def add_quiz(quizzes):
+    print("\n===== 퀴즈 추가 =====")
+
+    question = input("문제를 입력하세요: ").strip()
+
+    if not question:
+        print("문제는 비워둘 수 없습니다.")
+        return
+
+    choices = []
+
+    for i in range(4):
+        choice = input(f"{i + 1}번 보기를 입력하세요: ").strip()
+
+        if not choice:
+            print("보기는 비워둘 수 없습니다.")
+            return
+
+        choices.append(choice)
+
+    while True:
+        try:
+            answer = int(input("정답 번호 (1~4): ").strip())
+
+            if 1 <= answer <= 4:
+                break
+
+            print("1~4 사이의 번호를 입력해주세요.")
+
+        except ValueError:
+            print("숫자를 입력해주세요.")
+
+    new_quiz = Quiz(question, choices, answer)
+    quizzes.append(new_quiz)
+
+    print("퀴즈가 추가되었습니다!")
+
+
+def play_quiz(quizzes):
     score = 0
 
     if not quizzes:
@@ -43,6 +81,8 @@ def play_quiz():
     print(f"총 {len(quizzes)}문제 중 {score}문제 정답!")
 
 
+quizzes = create_default_quizzes()
+
 while True:
     print("\n===== 나라별 수도 퀴즈 게임 =====")
     print("1. 퀴즈 풀기")
@@ -61,10 +101,10 @@ while True:
         choice = int(choice)
 
         if choice == 1:
-            play_quiz()
+            play_quiz(quizzes)
 
         elif choice == 2:
-            print("퀴즈 추가 기능은 준비 중입니다.")
+            add_quiz(quizzes)
 
         elif choice == 3:
             print("퀴즈 목록 기능은 준비 중입니다.")
