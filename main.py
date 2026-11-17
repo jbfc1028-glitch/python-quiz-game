@@ -1,4 +1,48 @@
 
+from quiz_data import create_default_quizzes
+
+
+def play_quiz():
+    quizzes = create_default_quizzes()
+    score = 0
+
+    if not quizzes:
+        print("등록된 퀴즈가 없습니다.")
+        return
+
+    for quiz in quizzes:
+        print("\n--------------------")
+        quiz.show_question()
+
+        while True:
+            try:
+                answer = input("정답 번호 (1~4): ").strip()
+
+                if answer == "":
+                    print("정답 번호를 입력해주세요.")
+                    continue
+
+                answer = int(answer)
+
+                if answer < 1 or answer > 4:
+                    print("1~4 사이의 번호를 입력해주세요.")
+                    continue
+
+                break
+
+            except ValueError:
+                print("숫자를 입력해주세요.")
+
+        if quiz.check_answer(answer):
+            print("정답입니다!")
+            score += 1
+        else:
+            print(f"오답입니다! 정답은 {quiz.answer}번입니다.")
+
+    print("\n===== 퀴즈 결과 =====")
+    print(f"총 {len(quizzes)}문제 중 {score}문제 정답!")
+
+
 while True:
     print("\n===== 나라별 수도 퀴즈 게임 =====")
     print("1. 퀴즈 풀기")
@@ -17,16 +61,16 @@ while True:
         choice = int(choice)
 
         if choice == 1:
-            print("퀴즈 풀기를 선택했습니다.")
+            play_quiz()
 
         elif choice == 2:
-            print("퀴즈 추가를 선택했습니다.")
+            print("퀴즈 추가 기능은 준비 중입니다.")
 
         elif choice == 3:
-            print("퀴즈 목록을 선택했습니다.")
+            print("퀴즈 목록 기능은 준비 중입니다.")
 
         elif choice == 4:
-            print("최고 점수 확인을 선택했습니다.")
+            print("최고 점수 확인 기능은 준비 중입니다.")
 
         elif choice == 5:
             print("게임을 종료합니다.")
