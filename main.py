@@ -1,5 +1,5 @@
 
-from quiz import Quiz
+from quiz_game import QuizGame
 from quiz_data import create_default_quizzes
 
 
@@ -53,7 +53,8 @@ def show_quiz_list(quizzes):
     print(f"\n총 {len(quizzes)}개의 퀴즈가 등록되어 있습니다.")
 
 
-def play_quiz(quizzes, best_score):
+def play_quiz(game):
+    quizzes = game.quizzes
     score = 0
 
     if not quizzes:
@@ -92,17 +93,19 @@ def play_quiz(quizzes, best_score):
     print("\n===== 퀴즈 결과 =====")
     print(f"총 {len(quizzes)}문제 중 {score}문제 정답!")
 
-    if score > best_score:
-        best_score = score
+    final_score = round(score / len(quizzes) * 100) if quizzes else 0
+
+    print(f"이번 점수: {final_score}점 / 100점")
+
+    if game.update_best_score(final_score):
         print("새로운 최고 점수 달성!")
 
-    print(f"최고 점수: {best_score}점")
-
-    return best_score
+    game.show_best_score()
 
 
 quizzes = create_default_quizzes()
-best_score = 0
+game = QuizGame(quizzes)
+
 
 while True:
     print("\n===== 나라별 수도 퀴즈 게임 =====")
@@ -122,7 +125,7 @@ while True:
         choice = int(choice)
 
         if choice == 1:
-            best_score = play_quiz(quizzes, best_score)
+            play_quiz(game)
 
         elif choice == 2:
             add_quiz(quizzes)
@@ -131,7 +134,7 @@ while True:
             show_quiz_list(quizzes)
 
         elif choice == 4:
-            print(f"현재 최고 점수는 {best_score}점입니다.")
+            game.show_best_score()
 
         elif choice == 5:
             print("게임을 종료합니다.")
