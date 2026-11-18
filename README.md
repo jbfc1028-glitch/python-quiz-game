@@ -120,17 +120,101 @@ python-quiz-game/
 | `docs/screenshots/` | 실행 결과와 Git 실습 증빙 이미지 |
 | `README.md` | 프로젝트 설명 및 사용 방법 |
 
-### 클래스 설계
+### 프로젝트 설계 — 두 개의 클래스로 역할 분리
 
-**Quiz 클래스**
+이 프로젝트는 하나의 클래스에 모든 기능을 넣는 대신, **`Quiz` 클래스와 `QuizGame` 클래스**로 역할을 나누어 구현했습니다.
 
-개별 퀴즈의 문제, 보기, 정답을 관리합니다. 문제를 출력하고 사용자가 선택한 답이 정답인지 확인하는 역할을 담당합니다.
+각 클래스가 담당하는 기능을 분리하여 코드를 이해하고 관리하기 쉽게 만들었습니다.
 
-**QuizGame 클래스**
+#### 클래스 구조
 
-전체 퀴즈 목록과 최고 점수를 관리합니다. JSON 파일에 데이터를 저장하거나 기존 데이터를 불러오는 역할을 담당합니다.
+```text
+           [Python 퀴즈 게임]
+                   |
+          +--------+--------+
+          |                 |
+          v                 v
+     [Quiz 클래스]     [QuizGame 클래스]
+       quiz.py          quiz_game.py
+          |                 |
+      개별 문제 관리       게임 데이터 관리
+          |                 |
+      - 문제 내용         - 전체 퀴즈 목록
+      - 선택지 4개        - 최고 점수
+      - 정답 번호         - 최고 점수 갱신
+      - 문제 출력         - JSON 저장
+      - 정답 확인         - JSON 불러오기
+```
 
-이처럼 클래스별 역할을 나누어 프로그램의 구조를 정리했습니다.
+#### 1. Quiz 클래스 — 문제 하나를 관리
+
+**파일:** `quiz.py`
+
+```python
+class Quiz:
+    def __init__(self, question, choices, answer):
+        self.question = question
+        self.choices = choices
+        self.answer = answer
+
+    def show_question(self):
+        print(self.question)
+
+        for i, choice in enumerate(self.choices, start=1):
+            print(f"{i}. {choice}")
+
+    def check_answer(self, user_answer):
+        return self.answer == user_answer
+```
+
+**주요 역할**
+
+- `question`: 문제 내용 저장
+- `choices`: 4개의 선택지 저장
+- `answer`: 정답 번호 저장
+- `show_question()`: 문제와 선택지를 화면에 출력
+- `check_answer()`: 사용자가 입력한 답이 정답인지 확인
+
+예를 들어 '대한민국의 수도는?'이라는 문제 하나를 `Quiz` 객체로 만들 수 있습니다.
+
+#### 2. QuizGame 클래스 — 전체 퀴즈 데이터 관리
+
+**파일:** `quiz_game.py`
+
+```python
+class QuizGame:
+    def __init__(self, quizzes, best_score=0):
+        self.quizzes = quizzes
+        self.best_score = best_score
+```
+
+**주요 역할**
+
+- `quizzes`: 여러 개의 Quiz 객체를 목록으로 관리
+- `best_score`: 최고 점수 저장
+- `update_best_score()`: 새로운 점수와 최고 점수를 비교하고 갱신
+- `show_best_score()`: 최고 점수 출력
+- `save_state()`: 퀴즈와 점수를 `state.json`에 저장
+- `load_state()`: `state.json`에서 저장된 데이터를 불러오기
+
+메뉴와 사용자 입력 흐름은 `main.py`에서 담당하고, `QuizGame`은 게임 데이터 관리와 저장 기능을 담당하도록 구성했습니다.
+
+#### 클래스를 두 개로 나눈 이유
+
+| 구분 | Quiz | QuizGame |
+|---|---|---|
+| 관리 대상 | 문제 하나 | 여러 문제와 최고 점수 |
+| 핵심 기능 | 문제 출력, 정답 확인 | 점수 갱신, 파일 저장·불러오기 |
+| 파일 | `quiz.py` | `quiz_game.py` |
+
+**클래스를 나누면 좋은 점**
+
+1. 각 클래스의 역할이 명확해집니다.
+2. 문제 출력 방식을 수정할 때는 `Quiz` 클래스를 중심으로 수정할 수 있습니다.
+3. 저장 방식이나 최고 점수 기능을 수정할 때는 `QuizGame` 클래스를 중심으로 수정할 수 있습니다.
+4. 기능별로 코드를 확인하고 유지보수하기 쉬워집니다.
+
+
 
 ## 6. JSON 데이터 저장
 
