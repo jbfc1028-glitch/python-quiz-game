@@ -144,3 +144,6 @@ JSON 파일을 이용해 프로그램 종료 후에도
 
 또한 Git의 add, commit, push, branch, merge 등을
 사용하며 버전 관리 과정을 경험했습니다.
+
+## Git Clone 및 Pull 실습
+별도의 폴더에 저장소를 복제하여 Git 협업 과정을 실습했습니다.
