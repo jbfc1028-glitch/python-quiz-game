@@ -53,7 +53,7 @@ def show_quiz_list(quizzes):
     print(f"\n총 {len(quizzes)}개의 퀴즈가 등록되어 있습니다.")
 
 
-def play_quiz(quizzes):
+def play_quiz(quizzes, best_score):
     score = 0
 
     if not quizzes:
@@ -92,8 +92,17 @@ def play_quiz(quizzes):
     print("\n===== 퀴즈 결과 =====")
     print(f"총 {len(quizzes)}문제 중 {score}문제 정답!")
 
+    if score > best_score:
+        best_score = score
+        print("새로운 최고 점수 달성!")
+
+    print(f"최고 점수: {best_score}점")
+
+    return best_score
+
 
 quizzes = create_default_quizzes()
+best_score = 0
 
 while True:
     print("\n===== 나라별 수도 퀴즈 게임 =====")
@@ -113,7 +122,7 @@ while True:
         choice = int(choice)
 
         if choice == 1:
-            play_quiz(quizzes)
+            best_score = play_quiz(quizzes, best_score)
 
         elif choice == 2:
             add_quiz(quizzes)
@@ -122,7 +131,7 @@ while True:
             show_quiz_list(quizzes)
 
         elif choice == 4:
-            print("최고 점수 확인 기능은 준비 중입니다.")
+            print(f"현재 최고 점수는 {best_score}점입니다.")
 
         elif choice == 5:
             print("게임을 종료합니다.")
