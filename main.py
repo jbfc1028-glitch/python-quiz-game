@@ -1,4 +1,4 @@
-
+from quiz import Quiz
 from quiz_game import QuizGame
 from quiz_data import create_default_quizzes
 
@@ -105,7 +105,7 @@ def play_quiz(game):
 
 quizzes = create_default_quizzes()
 game = QuizGame(quizzes)
-
+game.load_state()
 
 while True:
     print("\n===== 나라별 수도 퀴즈 게임 =====")
@@ -137,6 +137,7 @@ while True:
             game.show_best_score()
 
         elif choice == 5:
+            game.save_state()
             print("게임을 종료합니다.")
             break
 
