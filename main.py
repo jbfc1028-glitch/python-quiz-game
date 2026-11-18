@@ -3,7 +3,8 @@ from quiz_game import QuizGame
 from quiz_data import create_default_quizzes
 
 
-def add_quiz(quizzes):
+def add_quiz(game):
+    quizzes = game.quizzes
     print("\n===== 퀴즈 추가 =====")
 
     question = input("문제를 입력하세요: ").strip()
@@ -37,6 +38,7 @@ def add_quiz(quizzes):
 
     new_quiz = Quiz(question, choices, answer)
     quizzes.append(new_quiz)
+    game.save_state()
 
     print("퀴즈가 추가되었습니다!")
 
@@ -128,7 +130,7 @@ while True:
             play_quiz(game)
 
         elif choice == 2:
-            add_quiz(quizzes)
+            add_quiz(game)
 
         elif choice == 3:
             show_quiz_list(quizzes)
@@ -148,5 +150,7 @@ while True:
         print("숫자를 입력해주세요.")
 
     except (KeyboardInterrupt, EOFError):
-        print("\n게임을 안전하게 종료합니다.")
+        print("\n입력이 중단되었습니다.")
+        game.save_state()
+        print("데이터를 저장하고 게임을 종료합니다.")
         break

@@ -16,6 +16,7 @@ class QuizGame:
     def show_best_score(self):
         print(f"현재 최고 점수는 {self.best_score}점 / 100점입니다.")
 
+    
     def save_state(self):
         data = {
             "best_score": self.best_score,
@@ -29,10 +30,15 @@ class QuizGame:
                 "answer": quiz.answer
             })
 
-        with open("state.json", "w", encoding="utf-8") as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
+        try:
+            with open("state.json", "w", encoding="utf-8") as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
 
-        print("게임 데이터가 저장되었습니다.")
+            print("게임 데이터가 저장되었습니다.")
+
+        except (OSError, TypeError, ValueError) as error:
+            print(f"게임 데이터 저장 중 오류가 발생했습니다: {error}")
+
 
     def load_state(self):
         if not Path("state.json").exists():
